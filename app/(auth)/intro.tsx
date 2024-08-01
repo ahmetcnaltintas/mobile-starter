@@ -1,10 +1,10 @@
 import { Text, SafeAreaView } from 'react-native'
 import React from 'react'
 
-export default function login() {
+export default function intro() {
   return (
     <SafeAreaView>
-      <Text>login</Text>
+      <Text className='text-center'>intro</Text>
     </SafeAreaView>
   )
 }

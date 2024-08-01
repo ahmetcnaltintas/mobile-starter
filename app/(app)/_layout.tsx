@@ -1,4 +1,5 @@
 import { Drawer } from 'expo-router/drawer';
+import { Home, Settings } from 'lucide-react-native';
 import { ThemeToggle } from '~/components/ThemeToggle';
 
 export default function AppLayout() {
@@ -11,6 +12,7 @@ export default function AppLayout() {
       <Drawer.Screen
         name="(tabs)"
         options={{
+          drawerIcon: ({color, size}) => <Home color={color} size={size}/>,
           drawerLabel: "Ana Sayfa",
           title: "Ana Sayfa",
         }}
@@ -18,6 +20,7 @@ export default function AppLayout() {
       <Drawer.Screen
         name="settings"
         options={{
+          drawerIcon: ({color, size}) => <Settings color={color} size={size}/>,
           drawerLabel: "Ayarlar",
           title: "Ayarlar",
         }}

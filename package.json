@@ -1,6 +1,7 @@
 {
   "name": "@rnr/starter-base",
   "main": "index.js",
+  "type": "module",
   "version": "1.0.0",
   "scripts": {
     "dev": "expo start -c --ios",
