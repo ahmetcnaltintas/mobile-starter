@@ -1,9 +1,13 @@
 import { Tabs } from 'expo-router/tabs';
 import { Home, Search, User } from 'lucide-react-native';
+import { BlurView } from 'expo-blur';
+
 
 export default function TabsLayout() {
   return (
-    <Tabs>
+    <Tabs 
+    
+    >
       <Tabs.Screen
         name="home"
         options={{

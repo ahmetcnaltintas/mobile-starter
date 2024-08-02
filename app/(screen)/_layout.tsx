@@ -7,6 +7,7 @@ export default function AppLayout() {
     <Drawer
       screenOptions={{
         headerRight: () => <ThemeToggle />,
+        headerTransparent: true,
       }}
     >
       <Drawer.Screen

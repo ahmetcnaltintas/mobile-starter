@@ -1,11 +1,12 @@
 import { View, Text } from 'react-native'
-import { Camera } from 'lucide-react-native';
 import React from 'react'
 
-export default function home() {
+const index = () => {
   return (
     <View>
-      <Text>home</Text>
+      <Text>Login</Text>
     </View>
   )
 }
+
+export default index
