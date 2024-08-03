@@ -1,13 +1,16 @@
-import { ImageBackground, SafeAreaView } from 'react-native'
-import React from 'react'
+import { ImageBackground, SafeAreaView } from 'react-native';
+import React, { ReactNode } from 'react';
 
-const BackgroundWrapper = ({childiren}) => {
-  return (
-    <ImageBackground className='flex-1'
-    source={require('../assets/images/bg.png')}>
-    <SafeAreaView>{childiren}</SafeAreaView>
-    </ImageBackground>
-  )
+interface BackgroundWrapperProps {
+  children: ReactNode;
 }
 
-export default BackgroundWrapper
+const BackgroundWrapper: React.FC<BackgroundWrapperProps> = ({ children }) => {
+  return (
+    <ImageBackground className='flex-1' source={require('../assets/image/other/background.png')}>
+      <SafeAreaView className='flex-1'>{children}</SafeAreaView>
+    </ImageBackground>
+  );
+}
+
+export default BackgroundWrapper;
