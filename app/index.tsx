@@ -3,7 +3,7 @@ import * as React from 'react';
 
 
 const Screen = () => {
-  return <Redirect href={'/login'} />;
+  return <Redirect href={'/intro'} />;
 }
 
 export default Screen;
