@@ -1,102 +1,89 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import axios from 'axios';
+import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
-import { ReceiptEuro } from "lucide-react-native";
+import { axiosInstance } from '~/lib/utils';
 
-interface AuthProps {
-    authState?: {token: string | null; authenticated: boolean | null};
-    onRegister?: (email: string, password: string) => Promise<any>;
-    onLogin?: (email: string, password: string) => Promise<any>;
-    onLogout?: () => Promise<any>;
-}
+type AuthState = {token: string | null; authenticated: boolean | null};
 
-const TOKEN_KEY = 'my-jwt';
-export const API_URL = "https://api.developbetterapps.com/"; 
-const AuthContext = createContext<AuthProps>({});
+const AuthContext = createContext<{
+  authState: AuthState;
+  setAuthState: Dispatch<SetStateAction<AuthState>>;
+  onLogout: () => void;
+}>({
+  authState: {
+    token: null,
+    authenticated: null,
+  },
+  setAuthState: () => {},
+  onLogout: () => {},
+});
 
-export const useAuth = () => {
-    return useContext(AuthContext);
-}
+export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({children}:any) => {
+export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
+  const [authState, setAuthState] = useState<AuthState>({
+    token: null,
+    authenticated: null,
+  });
 
-    const [authState, setAuthState] = useState<{
-        token: string | null;
-        authenticated: boolean | null;
-    }>({
-        token: null,
-        authenticated: null,
-    });
-
-    useEffect(() => {
-        const loadToken = async () => {
-            const token = await SecureStore.getItemAsync(TOKEN_KEY);
-            console.log("stored:", token);
-
-            if(token) {
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-                setAuthState({
-                    token: token,
-                    authenticated: true,
-                });
-            }
-        }
-        loadToken();
-    }, [])
-
-    /* KAYIT OL / REGİSTER */
-    const register = async (email: string, password: string) => {
-        try {
-            return await axios.post(`${API_URL}/users`, {email, password});
-        }
-        catch (e) {
-            return { error: true, msg: (e as any).response.data.msg };
-        }
-    }
-
-    /* GİRİŞ YAP / LOGİN */
-    const login = async (email: string, password: string) => {
-        try {
-            const result = await axios.post(`${API_URL}/auth`, {email, password});
-
-            console.log("AuthContext -> Login -> result", result);
-
-            setAuthState({
-                token: result.data.token,
-                authenticated: true
-            });
-
-            axios.defaults.headers.common['Authorization2'] = `Bearer ${result.data.token}`;
-
-            await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
-
-            return result;
-        }
-        catch (e) {
-            return { error: true, msg: (e as any).response.data.msg };
-        }
-    }
-
-    /* ÇIKIŞ YAP / LOGOUT */
-    const logout = async () => {
-        await SecureStore.deleteItemAsync(TOKEN_KEY);
-
-        axios.defaults.headers.common['Authorization'] = '';
-
-        setAuthState({
+  useEffect(() => {
+    const loadToken = async () => {
+      try {
+        const token = await SecureStore.getItemAsync('my-jwt');
+        console.log('Stored token:', token);
+        if (token) {
+          setAuthState({
+            token,
+            authenticated: true,
+          });
+          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        } else {
+          setAuthState({
             token: null,
             authenticated: false,
+          });
+        }
+      } catch (error) {
+        console.error('Error loading token:', error);
+        setAuthState({
+          token: null,
+          authenticated: false,
         });
-    }
-
-
-    const value = {
-        onRegister: register,
-        onLogin: login,
-        onLogout: logout,
-        authState
+      }
     };
+    loadToken();
+  }, []);
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
+  useEffect(() => {
+    const updateToken = async () => {
+      if (authState.token) {
+        await SecureStore.setItemAsync('my-jwt', authState.token);
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${authState.token}`;
+      } else {
+        await SecureStore.deleteItemAsync('my-jwt');
+        delete axiosInstance.defaults.headers.common['Authorization'];
+      }
+    };
+    updateToken();
+  }, [authState.token]);
+
+  const onLogout = async () => {
+    // Token'ı ve kimlik doğrulama durumunu sıfırla
+    setAuthState({
+      token: null,
+      authenticated: false,
+    });
+    // Token'ı SecureStore'dan sil
+    await SecureStore.deleteItemAsync('my-jwt');
+    // Axios instance'dan Authorization header'ını kaldır
+    delete axiosInstance.defaults.headers.common['Authorization'];
+    console.log('Logged out');
+  };
+
+  return (
+    <AuthContext.Provider value={{ authState, setAuthState, onLogout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export { AuthContext };

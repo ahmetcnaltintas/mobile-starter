@@ -7,38 +7,63 @@ import { router } from 'expo-router';
 import { useAuth } from '~/context/AuthContext';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { onLogin } = useAuth();
-
-  const login = async () => {
-    try {
-      const result = await onLogin!(email, password);
-  
-      if (result && result.error) {
-        Alert.alert(result.msg || 'Bir hata oluştu.');
-      } else {
-        // Başarılı giriş sonrası yönlendirme veya diğer işlemler
-        router.push('/home'); // Örneğin: başarılı giriş sonrası ana sayfaya yönlendir
-      }
-    } catch (error) {
-      Alert.alert('Giriş yapılamadı', 'Bir hata oluştu: ' + error.message);
-    }
-  }
-
-
+  const { setAuthState } = useAuth();
 
   const handleRoute = () => {
     router.push('/register');
   }
+  
+  const handleLogin = async () => {
+    if (!username || !password) {
+      Alert.alert('Hata', 'Kullanıcı adı ve şifre boş olamaz.');
+      return;
+    }
+  
+    try {
+      console.log('Giriş Yapmaya Çalışıyor:', { username, password });
+      const response = await fetch('https://fakestoreapi.com/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error('Login Başarısız');
+      }
+  
+      const data = await response.json();
+      console.log('Login response:', data);
+  
+      if (data.token) {
+        setAuthState({
+          token: data.token,
+          authenticated: true,
+        });
+        router.replace('/home');
+      } else {
+        throw new Error('Token alınamadı');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      Alert.alert('Hata', 'Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
+    }
+  };
+
   return (
     <BackgroundWrapper>
       <SafeAreaView className='flex-1 justify-center p-16 items-center'>
         <Text className='text-3xl font-bold text-center mb-12'>Giriş Yap</Text>
         <Input
-          placeholder="E-Posta"
-          onChangeText={(text: string) => setEmail(text)}
-          value={email}
+          placeholder="Kullanıcı Adı"
+          onChangeText={(text: string) => setUsername(text)}
+          value={username}
           className='mb-6 w-96'
         />
         <Input
@@ -48,7 +73,7 @@ const Login = () => {
           value={password}
           className='mb-6 w-96'
         />
-        <Button onPress={login}>
+        <Button onPress={handleLogin}>
           <Text className='text-white font-bold text-xl w-56 text-center'>Giriş Yap</Text>
         </Button>
         <View className='mt-6'>

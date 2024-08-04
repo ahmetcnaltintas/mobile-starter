@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Redirect } from 'expo-router';
+import { Text } from 'react-native';
+import { Redirect, useRouter } from 'expo-router';
 import { AuthProvider, useAuth } from '~/context/AuthContext';
 
 export default function App() {
@@ -8,17 +9,29 @@ export default function App() {
       <Screen />
     </AuthProvider>
   );
-};
-
-const Screen = () => {
-  const { authState } = useAuth();
-
-  return (
-    <>
-      {authState?.authenticated ? 
-        <Redirect href={'/home'} /> 
-        : 
-        <Redirect href={'/login'} />}
-    </>
-  );
 }
+
+const Screen: React.FC = () => {
+  const { authState } = useAuth();
+  const router = useRouter();
+
+  console.log('Geçerli Auth Durumu:', authState);
+
+  React.useEffect(() => {
+    console.log('Ekran efekti çalışıyor:', authState);
+    if (authState.authenticated === false) {
+      console.log('Ana sayfaya yönlendiriliyor');
+      router.replace('/home');
+    } else if (authState.authenticated === true) {
+      console.log('Logine yönlendiriliyor');
+      router.replace('/login');
+    }
+  }, [authState, router]);
+
+  if (authState.authenticated === null) {
+    console.log('Auth Durumu Yükleniyor');
+    return <Text>Loading...</Text>;
+  }
+
+  return null;
+};

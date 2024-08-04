@@ -21,11 +21,16 @@ import { useAuth } from '~/context/AuthContext';
 export default function AppLayout() {
   const { authState, onLogout} = useAuth();
 
-  const onSetting = () => {
+  const handleLogout = () => {
+    onLogout();
+    router.replace('/login');
+  };
+
+  const handleSettings = () => {
     router.push('/settings');
   };
 
-  const onProfile = () => {
+  const handleProfile = () => {
     router.push('/profile');
   };
 
@@ -47,15 +52,15 @@ export default function AppLayout() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-              <TouchableOpacity onPress={onProfile}>
+              <TouchableOpacity onPress={handleProfile}>
                   <View className='flex-row items-center'>
                     <User color="purple" />
-                    <Text className='ml-2 text-base'>Profil Ayarlar</Text>
+                    <Text className='ml-2 text-base'>Profilim</Text>
                   </View>
                 </TouchableOpacity>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <TouchableOpacity onPress={onSetting}>
+                <TouchableOpacity onPress={handleSettings}>
                   <View className='flex-row items-center'>
                     <Settings color="purple" />
                     <Text className='ml-2 text-base'>Genel Ayarlar</Text>
@@ -64,7 +69,7 @@ export default function AppLayout() {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <TouchableOpacity onPress={onLogout}>
+                <TouchableOpacity onPress={handleLogout}>
                   <View className='flex-row items-center'>
                     <LogOut color="purple" />
                     <Text className='ml-2 text-base'>Çıkış Yap</Text>
