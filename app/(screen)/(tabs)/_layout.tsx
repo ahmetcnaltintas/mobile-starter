@@ -5,17 +5,7 @@ export default function TabsLayout() {
   return (
     <Tabs screenOptions={{ 
       tabBarStyle: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
         height: 70,
-        backgroundColor: '#F8F7FB',
-        borderRadius: 30,
-        elevation: 5,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        paddingHorizontal: 20,
-        alignItems: 'center',
       },
      }}>
       <Tabs.Screen

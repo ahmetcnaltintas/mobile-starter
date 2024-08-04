@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Text } from 'react-native';
+import 'react-native-reanimated'
+import 'react-native-gesture-handler'
 import { Redirect, useRouter } from 'expo-router';
 import { AuthProvider, useAuth } from '~/context/AuthContext';
 
