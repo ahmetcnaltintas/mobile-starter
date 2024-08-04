@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
-import { Text, SafeAreaView, View, TouchableOpacity } from 'react-native';
+import { Text, SafeAreaView, View, TouchableOpacity, Alert } from 'react-native';
 import BackgroundWrapper from '~/components/BackgroundWrapper';
 import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import { router } from 'expo-router';
+import { useAuth } from '~/context/AuthContext';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { onLogin } = useAuth();
 
-  const handleLogin = () => {
-    console.log('Username:', username);
-    console.log('Password:', password);
-    router.push('/home');
-  };
+  const login = async () => {
+    try {
+      const result = await onLogin!(email, password);
+  
+      if (result && result.error) {
+        Alert.alert(result.msg || 'Bir hata oluştu.');
+      } else {
+        // Başarılı giriş sonrası yönlendirme veya diğer işlemler
+        router.push('/home'); // Örneğin: başarılı giriş sonrası ana sayfaya yönlendir
+      }
+    } catch (error) {
+      Alert.alert('Giriş yapılamadı', 'Bir hata oluştu: ' + error.message);
+    }
+  }
+
+
 
   const handleRoute = () => {
     router.push('/register');
@@ -23,19 +36,19 @@ const Login = () => {
       <SafeAreaView className='flex-1 justify-center p-16 items-center'>
         <Text className='text-3xl font-bold text-center mb-12'>Giriş Yap</Text>
         <Input
-          placeholder="Kullanıcı Adı"
-          value={username}
-          onChangeText={setUsername}
+          placeholder="E-Posta"
+          onChangeText={(text: string) => setEmail(text)}
+          value={email}
           className='mb-6 w-96'
         />
         <Input
           placeholder="Şifre"
-          secureTextEntry
+          secureTextEntry={true}
+          onChangeText={(text: string) => setPassword(text)}
           value={password}
-          onChangeText={setPassword}
           className='mb-6 w-96'
         />
-        <Button onPress={handleLogin}>
+        <Button onPress={login}>
           <Text className='text-white font-bold text-xl w-56 text-center'>Giriş Yap</Text>
         </Button>
         <View className='mt-6'>

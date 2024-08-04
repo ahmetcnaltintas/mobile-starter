@@ -1,14 +1,18 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import BackgroundWrapper from '~/components/BackgroundWrapper'
+import { Text, SafeAreaView, View } from 'react-native';
+import React from 'react';
+import BackgroundWrapper from '~/components/BackgroundWrapper';
 
-
-export default function home() {
+const Home = () => {
   return (
     <BackgroundWrapper>
-      <View>
-        <Text>home</Text>
-      </View>
+      <SafeAreaView className='flex-1'>
+        <View className='flex-1 justify-center items-center'>
+          <Text className='text-2xl'>Anasayfa</Text>
+        </View>
+      </SafeAreaView>
     </BackgroundWrapper>
-  )
-}
+  );
+};
+
+
+export default Home;
