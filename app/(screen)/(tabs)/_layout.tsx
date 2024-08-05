@@ -1,11 +1,17 @@
 import { Tabs } from 'expo-router/tabs';
-import { Home, LibraryBig, Search } from 'lucide-react-native';
+import { BookOpenCheck, Home, LibraryBig, Search } from 'lucide-react-native';
 
 export default function TabsLayout() {
   return (
     <Tabs screenOptions={{ 
       tabBarStyle: {
-        height: 70,
+        height: 80,
+      },
+      tabBarLabelStyle: {
+        marginTop: 1,
+      },
+      tabBarIconStyle: {
+        marginTop: 10,
       },
      }}>
       <Tabs.Screen
@@ -19,7 +25,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="exams"
         options={{
-          tabBarIcon: ({color, size}) => <Search color={color} size={size} />,
+          tabBarIcon: ({color, size}) => <BookOpenCheck color={color} size={size} />,
           tabBarLabel: "Sınavlarım",
           headerShown: false,
         }}

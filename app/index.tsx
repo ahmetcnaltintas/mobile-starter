@@ -21,10 +21,10 @@ const Screen: React.FC = () => {
 
   React.useEffect(() => {
     console.log('Ekran efekti çalışıyor:', authState);
-    if (authState.authenticated === true) {
+    if (authState.authenticated === false) {
       console.log('Ana sayfaya yönlendiriliyor');
       router.replace('/home');
-    } else if (authState.authenticated === false) {
+    } else if (authState.authenticated === true) {
       console.log('Logine yönlendiriliyor');
       router.replace('/intro');
     }

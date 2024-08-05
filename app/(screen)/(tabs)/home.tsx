@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import { StyleSheet, Pressable, View, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { MotiView } from 'moti';
 import { Skeleton } from 'moti/skeleton';
 import BackgroundWrapper from '~/components/BackgroundWrapper';
@@ -13,7 +13,7 @@ export default function HelloWorld() {
   const colorMode = dark ? 'dark' : 'light';
 
   const renderItem = () => (
-    <Card className='mt-14 h-64 w-90'>
+    <Card className='m-2 h-64 w-90'>
       <MotiView
         transition={{
           type: 'timing',
@@ -29,7 +29,8 @@ export default function HelloWorld() {
         <Skeleton colorMode={colorMode} width={'100%'} />
       </MotiView>
     </Card>
-  );
+  ); 
+
 
   return (
     <BackgroundWrapper>

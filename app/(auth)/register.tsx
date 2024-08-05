@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, SafeAreaView, View, TouchableOpacity } from 'react-native';
+import { Text, SafeAreaView, View, TouchableOpacity, Image } from 'react-native';
 import BackgroundWrapper from '~/components/BackgroundWrapper';
 import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
@@ -22,6 +22,9 @@ const Login = () => {
   return (
     <BackgroundWrapper>
       <SafeAreaView className='flex-1 justify-center p-16 items-center'>
+      <View className='w-80 items-center justify-center mb-16'>
+        <Image source={require('../../assets/image/edulimlogo.png')} className='w-64 h-20 object-cover' />
+      </View>
         <Text className='text-3xl font-bold text-center mb-12'>Kayıt Ol</Text>
         <Input
           placeholder="E-Posta"
