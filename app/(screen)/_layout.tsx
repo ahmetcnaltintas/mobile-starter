@@ -34,6 +34,7 @@ export default function AppLayout() {
   return (
     <Drawer
       screenOptions={{
+        headerTitle: '',
         headerBackground: () => (
           <BlurView intensity={50} style={{ flex: 1 }} tint="light" />
         ),
@@ -90,7 +91,7 @@ export default function AppLayout() {
         options={{
           drawerIcon: ({color, size}) => <Home color={color} size={size}/>,
           drawerLabel: "Ana Sayfa",
-          title: "Ana Sayfa",
+          title: "Edulim",
         }}
       />
       <Drawer.Screen
